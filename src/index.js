@@ -19,16 +19,13 @@ class App extends Component {
       videos: []
     };
 
-    YTSearch({ key: API_KEY, term: "lost_pause" }, videos => {
-      this.setState({
-        videos: videos,
-        selectedVideo: videos[0]
-      });
-      console.log(this.state.videos);
-    });
+
+
+    this.videoSearch("pewdiepie");
 
     this.executor = this.executor.bind(this);
     this.handleSelectVideo = this.handleSelectVideo.bind(this);
+    this.videoSearch = this.videoSearch.bind(this);
   }
 
   executor(signal, value) {
@@ -44,10 +41,20 @@ class App extends Component {
     this.setState({ selectedVideo: video });
   }
 
+  videoSearch(term) {
+    YTSearch({ key: API_KEY, term: term }, videos => {
+      this.setState({
+        videos: videos,
+        selectedVideo: videos[0]
+      });
+      console.log(this.state.videos);
+    });
+  }
+
   render() {
     return (
       <div>
-        <SearchBar />
+        <SearchBar onChange={term => this.videoSearch(term)} />
         <VideoDetail video={this.state.selectedVideo} />
         <VideoList
           executor={this.executor}
